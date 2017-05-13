@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Expanding Brain Generator</title>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.2/dragula.min.js'></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.2/dragula.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css" />
+    <link rel="stylesheet" href="https://unpkg.com/purecss@0.6.2/build/pure-min.css">
+    <style>
+        .thumbnail {
+            width: 100px;
+        }
+        
+        .brain-wrapper textarea {
+            display: none;
+            position: absolute;
+            margin-left: 100px;
+            height: 50px;
+        }
+        
+        #brains .brain-wrapper:hover textarea {
+            display: inline-block;
+        }
+        
+        #brains .brain-wrapper textarea:focus {
+            display: inline-block;
+        }
+        
+        #backup {
+            text-align: center;
+        }
+        
+        #backup .brain-wrapper {
+            display: inline-block;
+        }
+        
+        #canvas {
+            width: 120px;
+            cursor: zoom-in;
+        }
+        
+        #overlay {
+            width: 600px;
+            max-width: 100%;
+        }
+        
+        .preview {
+            box-sizing: border-box;
+            border-right: 1px solid black;
+            text-align: center;
+        }
+        
+        .preview aside {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, .4);
+            cursor: zoom-out;
+            opacity: 0;
+            height: 0;
+            overflow: hidden;
+            transition: opacity 0.3s linear;
+        }
+        
+        section .inner-container {
+            height: 75vh;
+            overflow: auto;
+            box-sizing: border-box;
+            border-top: 1px solid black;
+            border-bottom: 1px solid black;
+        }
+        
+        .container .inner-container .brain-wrapper {
+            height: 50px;
+            overflow: hidden;
+        }
+        
+        .controls {
+            border-bottom: 1px solid black;
+            text-align: center;
+        }
+        
+        @media screen and (min-width: 48em) {
+            body {
+                text-align: center;
+            }
+            .container .inner-container .brain-wrapper {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <article class="pure-g">
+        <h1 class="pure-u-1">Expanding Brain Generator</h1>
+        <section class="pure-u-2-5 preview">
+            <div class="inner-container">
+                <canvas id="canvas" width="600" height="100" onclick="showOverlay()"></canvas>
+            </div>
+            <aside onclick="hideOverlay()">
+                <canvas id="overlay" width="600" height="100"></canvas>
+            </aside>
+        </section>
+        <section class="pure-u-3-5 container">
+            <div id="brains" class="inner-container pure-form"></div>
+        </section>
+        <section class="pure-u-1 controls">
+            <a class="pure-button pure-button-primary" onclick="downloadCanvas(this, 'canvas', 'meme.png')">
+                <i class="fa fa-floppy-o"></i>
+            </a>
+        </section>
+        <aside class="pure-u-1 container">
+            <div id="backup" class="inner-container"></div>
+        </aside>
+    </article>
+
+    <script>
+        (function () {
+            var BRAIN_START = 0, BRAIN_END = 10;
+            var BACKUP_START = 0, BACKUP_END = 14;
+
+            var brainsContainer = document.getElementById('brains');
+            generateBrains();
+            var backupContainer = document.getElementById('backup');
+            generateBackup();
+
+            var canvas = document.getElementById('canvas');
+            var ctx = canvas.getContext('2d');
+            redrawBrains();
+
+            var drake = dragula([brainsContainer, backupContainer]);
+            drake.on('drop', function (el, target, source) {
+                if (source !== target || target === brainsContainer) {
+                    redrawBrains();
+                }
+            });
+
+            function generateBrains() {
+                generateImgs('img/', BRAIN_START, BRAIN_END, brainsContainer);
+            }
+
+            function generateBackup() {
+                generateImgs('img/bonus/', BACKUP_START, BACKUP_END, backupContainer);
+            }
+
+            function generateImgs(prefix, from, to, parent) {
+                for (var i = from; i <= to; ++i) {
+                    var div = document.createElement('div');
+                    div.id = parent.id + ':' + i;
+                    div.className = 'brain-wrapper';
+
+                    var input = document.createElement('textarea');
+                    input.onchange = redrawBrains;
+
+                    var image = document.createElement('img');
+                    image.src = prefix + i + '.png';
+                    image.className = 'thumbnail';
+
+                    div.appendChild(input);
+                    div.appendChild(image);
+
+                    parent.appendChild(div);
+                }
+            }
+
+            function redrawBrains() {
+                clearCanvas();
+                drawRecurrently(0, 0);
+            }
+
+            function drawRecurrently(heightProm, i) {
+                if (i < brainsContainer.children.length) {
+                    var child = brainsContainer.children[i];
+
+                    if (heightProm instanceof Promise) {
+                        heightProm.then(function (availableHeight) {
+                            drawRecurrently(drawRowAtHeight(child, availableHeight), ++i);
+                        });
+                    } else {
+                        drawRecurrently(drawRowAtHeight(child, heightProm), ++i);
+                    }
+                } else {
+                    heightProm.then(function () {
+                        resizeCanvas(canvas.height - 5);
+                    });
+                }
+            }
+
+            function drawRowAtHeight(source, y) {
+                var lineHeight = 3;
+
+                var imageObj = new Image();
+                imageObj.src = source.lastChild.src;
+
+                var result = new Promise(function (resolve) {
+                    imageObj.onload = function () {
+                        var ratio = imageObj.height / imageObj.width;
+                        var height = 300 * ratio;
+                        var linePosY = y + height;
+                        resizeCanvas(linePosY + lineHeight + 1);
+                        ctx.drawImage(imageObj, 300, y, 300, height);
+                        ctx.fillStyle = '#000';
+                        ctx.fillRect(0, linePosY, canvas.width, lineHeight);
+
+                        drawCenteredMultilineText(source, y, height);
+
+                        resolve(linePosY + lineHeight);
+                    }
+                });
+
+                return result;
+            }
+
+            function drawCenteredMultilineText(source, y, availableHeight) {
+                if (source.firstChild && source.firstChild.value) {
+                    var textArray = source.firstChild.value.split('\n');
+                    var fontSize = 25;
+                    var fontType = 'Arial';
+                    ctx.font = fontSize + 'px ' + fontType;
+
+                    var starter = -10;
+                    var i = textArray.length / 2;
+                    textArray.forEach(function (line) {
+                        ctx.fillText(line, 10, y + availableHeight / 2 - starter - i * fontSize);
+                        --i;
+                    });
+                }
+            }
+
+            function resizeCanvas(newSize) {
+                var temp = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                canvas.height = newSize;
+                clearCanvas();
+                ctx.putImageData(temp, 0, 0);
+            }
+
+            function clearCanvas() {
+                ctx.fillStyle = '#fff';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            }
+        })();
+
+        function downloadCanvas(link, canvasId, filename) {
+            link.href = document.getElementById(canvasId).toDataURL();
+            link.download = filename;
+        }
+
+        function showOverlay() {
+            var originalCanvas = document.getElementById('canvas');
+            var originalCtx = originalCanvas.getContext('2d');
+            var overlayCanvas = document.getElementById('overlay');
+            var overlayCtx = overlayCanvas.getContext('2d');
+
+            overlayCanvas.height = originalCanvas.height;
+            overlayCtx.putImageData(originalCtx.getImageData(0, 0, originalCanvas.width, originalCanvas.height), 0, 0);
+
+            document.getElementById('overlay').parentElement.style.height = 'auto';
+            document.getElementById('overlay').parentElement.style.opacity = '1';
+        }
+
+        function hideOverlay() {
+            document.getElementById('overlay').parentElement.style.opacity = '0';
+            document.getElementById('overlay').parentElement.style.height = '0';
+        }
+    </script>
+</body>
+
+</html>
