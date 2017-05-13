@@ -8,8 +8,21 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css" />
     <link rel="stylesheet" href="https://unpkg.com/purecss@0.6.2/build/pure-min.css">
     <style>
+        #title {
+            display: none;
+        }
+        
+        .pure-button-disabled {
+            color: rgba(0, 0, 0, .4);
+            opacity: unset;
+        }
+        
         .thumbnail {
             width: 100px;
+        }
+        
+        .navigation {
+            width: 100%;
         }
         
         .brain-wrapper textarea {
@@ -45,6 +58,21 @@
             max-width: 100%;
         }
         
+        #loading {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, .7);
+            text-align: center;
+        }
+        
+        #loading .fa-spinner {
+            color: white;
+            margin-top: 20%;
+        }
+        
         .preview {
             box-sizing: border-box;
             border-right: 1px solid black;
@@ -52,7 +80,7 @@
         }
         
         .preview aside {
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
@@ -60,13 +88,22 @@
             cursor: zoom-out;
             opacity: 0;
             height: 0;
-            overflow: hidden;
+            overflow: auto;
             transition: opacity 0.3s linear;
         }
         
-        section .inner-container {
-            height: 75vh;
+        .preview .inner-container {
             overflow: auto;
+        }
+        
+        .main-container .inner-container {
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .preview .inner-container,
+        .main-container {
+            height: 274px;
             box-sizing: border-box;
             border-top: 1px solid black;
             border-bottom: 1px solid black;
@@ -82,9 +119,20 @@
             text-align: center;
         }
         
-        @media screen and (min-width: 48em) {
+        @media screen and (min-device-width: 48em) {
+            #title {
+                display: block;
+            }
             body {
                 text-align: center;
+            }
+            .preview .inner-container,
+            .main-container {
+                min-height: 274px;
+                height: 75vh;
+            }
+            .main-container .inner-container {
+                height: calc(75vh - 74px);
             }
             .container .inner-container .brain-wrapper {
                 text-align: center;
@@ -95,7 +143,7 @@
 
 <body>
     <article class="pure-g">
-        <h1 class="pure-u-1">Expanding Brain Generator</h1>
+        <h1 id="title" class="pure-u-1">Expanding Brain Generator</h1>
         <section class="pure-u-2-5 preview">
             <div class="inner-container">
                 <canvas id="canvas" width="600" height="100" onclick="showOverlay()"></canvas>
@@ -104,8 +152,14 @@
                 <canvas id="overlay" width="600" height="100"></canvas>
             </aside>
         </section>
-        <section class="pure-u-3-5 container">
-            <div id="brains" class="inner-container pure-form"></div>
+        <section class="pure-u-3-5 container main-container">
+            <button class="pure-button control navigation" onclick="scrollElement(this.nextElementSibling, -50)">
+                <i class="fa fa-arrow-up"></i>
+            </button>
+            <div id="brains" class="inner-container pure-form" onwheel="scrollElement(this, 0, event)"></div>
+            <button class="pure-button control navigation" onclick="scrollElement(this.previousElementSibling, 50)">
+                <i class="fa fa-arrow-down"></i>
+            </button>
         </section>
         <section class="pure-u-1 controls">
             <a class="pure-button pure-button-primary" onclick="downloadCanvas(this, 'canvas', 'meme.png')">
@@ -116,9 +170,18 @@
             <div id="backup" class="inner-container"></div>
         </aside>
     </article>
+    <aside id="loading">
+        <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+        <span class="sr-only">Loading...</span>
+    </aside>
 
     <script>
         (function () {
+            window.onload = function () {
+                var load = document.getElementById('loading');
+                load.parentElement.removeChild(load);
+            };
+
             var BRAIN_START = 0, BRAIN_END = 10;
             var BACKUP_START = 0, BACKUP_END = 14;
 
@@ -130,11 +193,13 @@
             var canvas = document.getElementById('canvas');
             var ctx = canvas.getContext('2d');
             redrawBrains();
+            verifyScroll(brainsContainer);
 
             var drake = dragula([brainsContainer, backupContainer]);
             drake.on('drop', function (el, target, source) {
                 if (source !== target || target === brainsContainer) {
                     redrawBrains();
+                    verifyScroll(brainsContainer);
                 }
             });
 
@@ -257,13 +322,64 @@
             overlayCanvas.height = originalCanvas.height;
             overlayCtx.putImageData(originalCtx.getImageData(0, 0, originalCanvas.width, originalCanvas.height), 0, 0);
 
-            document.getElementById('overlay').parentElement.style.height = 'auto';
+            document.getElementById('overlay').parentElement.style.height = '100%';
             document.getElementById('overlay').parentElement.style.opacity = '1';
         }
 
         function hideOverlay() {
             document.getElementById('overlay').parentElement.style.opacity = '0';
             document.getElementById('overlay').parentElement.style.height = '0';
+        }
+
+        function scrollElement(element, value, event) {
+            if (event && event.deltaY) {
+                if (event.deltaY > 0) {
+                    scrollElement(element, 50);
+                } else {
+                    scrollElement(element, -50);
+                }
+            } else {
+                element.scrollTop += value;
+            }
+
+            verifyScroll(element);
+        }
+
+        function verifyScroll(element) {
+            if (element.scrollTop === 0) {
+                addElementClass(element.previousElementSibling, 'pure-button-disabled');
+            } else {
+                removeElementClass(element.previousElementSibling, 'pure-button-disabled');
+            }
+
+            if (isBottom(element)) {
+                addElementClass(element.nextElementSibling, 'pure-button-disabled');
+            } else {
+                removeElementClass(element.nextElementSibling, 'pure-button-disabled');
+            }
+        }
+
+        function addElementClass(element, className) {
+            var classes = element.className.split(' ');
+            var index = classes.indexOf(className);
+            if (index === -1) {
+                classes.push(className);
+                element.className = classes.join(' ');
+            }
+        }
+
+        function removeElementClass(element, className) {
+            var classes = element.className.split(' ');
+            var index = classes.indexOf(className);
+            if (index !== -1) {
+                classes.splice(index, 1);
+                element.className = classes.join(' ');
+            }
+        }
+
+        function isBottom(element) {
+            var diff = element.scrollHeight - element.scrollTop;
+            return diff === element.clientHeight || diff <= element.clientHeight + 5; // up to 5 - tolerance for calc
         }
     </script>
 </body>
