@@ -12,4 +12,4 @@ Stack:
  - [Pure.css](http://purecss.io/) - a set of small, responsive CSS modules that you can use in every web project
  - HTML5, Canvas API; special thanks to the [JSFiddle](https://jsfiddle.net/AbdiasSoftware/7PRNN/)'s author
 
-### [https://9gag.com/gag/anbZKGn](https://9gag.com/gag/anbZKGn)
+### [https://9gag.com/gag/az8yVjb](https://9gag.com/gag/az8yVjb)
