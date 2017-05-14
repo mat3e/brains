@@ -66,10 +66,10 @@
             height: 100%;
             background: rgba(0, 0, 0, .7);
             text-align: center;
+            color: white;
         }
         
         #loading .fa-spinner {
-            color: white;
             margin-top: 20%;
         }
         
@@ -179,6 +179,7 @@
     <aside id="loading">
         <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
         <span class="sr-only">Loading...</span>
+        <p>Use drag&amp;drop and fill the textboxes to create your meme!</p>
     </aside>
 
     <script>
@@ -206,6 +207,9 @@
                     } else {
                         heightProm.then(function () {
                             canvasApi.resizeCanvas(canvas.height - 5);
+                            ctx.fillStyle = 'rgba(220,220,220,.8)';
+                            ctx.font = '15px Arial';
+                            ctx.fillText('mat3e.github.io/brains', 10, 20);
                         });
                     }
                 },
