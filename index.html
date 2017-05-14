@@ -25,6 +25,14 @@
             width: 100%;
         }
         
+        .gh-ribbon {
+            position: absolute;
+            top: 0;
+            left: 0;
+            border: 0;
+            z-index: 1;
+        }
+        
         .brain-wrapper textarea {
             display: none;
             position: absolute;
@@ -67,6 +75,7 @@
             background: rgba(0, 0, 0, .7);
             text-align: center;
             color: white;
+            z-index: 10;
         }
         
         #loading .fa-spinner {
@@ -90,6 +99,7 @@
             height: 0;
             overflow: auto;
             transition: opacity 0.3s linear;
+            z-index: 10;
         }
         
         .preview .inner-container {
@@ -181,14 +191,24 @@
         <span class="sr-only">Loading...</span>
         <p>Use drag&amp;drop and fill the textboxes to create your meme!</p>
     </aside>
+    <a href="https://github.com/mat3e/brains">
+        <img class="gh-ribbon" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"
+            src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67">
+    </a>
 
     <script>
         var canvasApi = (function () {
+            var WIDTH = 600;
+
             var brainsContainer = document.getElementById('brains');
             var canvas = document.getElementById('canvas');
             var ctx = canvas.getContext('2d');
+            canvas.width = WIDTH;
 
             return {
+                get WIDTH() {
+                    return WIDTH;
+                },
                 redrawBrains() {
                     canvasApi.clearCanvas();
                     canvasApi.drawRecurrently(0, 0);
@@ -222,10 +242,10 @@
                     var result = new Promise(function (resolve) {
                         imageObj.onload = function () {
                             var ratio = imageObj.height / imageObj.width;
-                            var height = 300 * ratio;
+                            var height = (WIDTH / 2) * ratio;
                             var linePosY = y + height;
                             canvasApi.resizeCanvas(linePosY + lineHeight + 1);
-                            ctx.drawImage(imageObj, 300, y, 300, height);
+                            ctx.drawImage(imageObj, (WIDTH / 2), y, (WIDTH / 2), height);
                             ctx.fillStyle = '#000';
                             ctx.fillRect(0, linePosY, canvas.width, lineHeight);
 
@@ -251,7 +271,7 @@
                             var x = 10;
                             if (centered) {
                                 ctx.textAlign = 'center';
-                                x = 150;
+                                x = WIDTH / 4;
                             } else {
                                 ctx.textAlign = 'start';
                             }
@@ -332,7 +352,10 @@
         })();
 
         var overlayApi = (function () {
-            var overlayStyle = document.getElementById('overlay').parentElement.style;
+            var overlay = document.getElementById('overlay');
+            var overlayMainStyle = overlay.parentElement.style;
+            overlay.width = canvasApi.WIDTH;
+            overlay.style.width = canvasApi.WIDTH + 'px';
 
             return {
                 show() {
@@ -344,12 +367,12 @@
                     overlayCanvas.height = originalCanvas.height;
                     overlayCtx.putImageData(originalCtx.getImageData(0, 0, originalCanvas.width, originalCanvas.height), 0, 0);
 
-                    overlayStyle.height = '100%';
-                    overlayStyle.opacity = '1';
+                    overlayMainStyle.height = '100%';
+                    overlayMainStyle.opacity = '1';
                 },
                 hide() {
-                    overlayStyle.opacity = '0';
-                    overlayStyle.height = '0';
+                    overlayMainStyle.opacity = '0';
+                    overlayMainStyle.height = '0';
                 }
             }
         })();
