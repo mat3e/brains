@@ -318,7 +318,6 @@
         })();
 
         var overlayApi = (function () {
-            var hash = 'overlay';
             var loading = document.getElementById('loading');
             var overlay = loading.parentElement;
 
@@ -327,8 +326,8 @@
                 overlayApi.hide();
             };
 
-            window.onpopstate = function () {
-                if (location.hash !== '#' + hash) {
+            window.onpopstate = function (e) {
+                if (actualElement) {
                     overlayApi.hide();
                 }
             }
@@ -349,19 +348,19 @@
                     cancelDisplaying();
                     if (actualElement) {
                         cssApi.deactivate(actualElement);
+                        actualElement = null;
                     }
-                    location.hash = '';
                 }
             }
 
             function show(element) {
                 if (typeof element === 'number') {
-                    cssApi.activate(overlay.children[element]);
+                    actualElement = overlay.children[element];
                 } else if (element && element.style) {
-                    cssApi.activate(element);
+                    actualElement = element;
                 }
+                cssApi.activate(actualElement);
                 cssApi.activate(overlay);
-                location.hash = hash;
             }
             function cancelDisplaying() {
                 for (var i = 0; i < overlay.children.length; ++i) {
