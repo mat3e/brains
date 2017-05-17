@@ -328,7 +328,6 @@
             };
 
             window.onhashchange = function (e) {
-                console.log(e);
                 if (e.oldURL.split('#')[1] === hash) {
                     overlayApi.hide();
                     e.preventDefault();
