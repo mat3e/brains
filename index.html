@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.2/dragula.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css" />
     <link rel="stylesheet" href="https://unpkg.com/purecss@0.6.2/build/pure-min.css">
-    <link rel="stylesheet" href="https://unpkg.com/purecss@0.6.2/build/grids-responsive-min.css">
     <style>
         body {
             text-align: center;
@@ -152,6 +151,12 @@
         }
         
         @media screen and (min-device-width: 48em) {
+            .pure-u-md-2-5 {
+                width: 40%;
+            }
+            .pure-u-md-3-5 {
+                width: 60%;
+            }
             .c-header {
                 display: block;
             }
@@ -212,6 +217,9 @@
             }
             .c-controls .pure-button {
                 width: 64px;
+            }
+            .c-overlay #loading {
+                margin-top: 10%;
             }
         }
     </style>
