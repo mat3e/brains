@@ -329,6 +329,7 @@
             window.onpopstate = function (e) {
                 if (actualElement) {
                     overlayApi.hide();
+                    e.preventDefault();
                 }
             }
 
