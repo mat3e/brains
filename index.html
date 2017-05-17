@@ -7,22 +7,20 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.2/dragula.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css" />
     <link rel="stylesheet" href="https://unpkg.com/purecss@0.6.2/build/pure-min.css">
+    <link rel="stylesheet" href="https://unpkg.com/purecss@0.6.2/build/grids-responsive-min.css">
     <style>
-        #title {
+        body {
+            text-align: center;
+            font-family: Arial;
+        }
+        
+        .button-success {
+            background: rgb(28, 184, 65);
+            color: white;
+        }
+        
+        .c-header {
             display: none;
-        }
-        
-        .pure-button-disabled {
-            color: rgba(0, 0, 0, .4);
-            opacity: unset;
-        }
-        
-        .thumbnail {
-            width: 100px;
-        }
-        
-        .navigation {
-            width: 100%;
         }
         
         .gh-ribbon {
@@ -30,122 +28,190 @@
             top: 0;
             left: 0;
             border: 0;
-            z-index: 1;
         }
         
-        .brain-wrapper textarea {
+        .active {
+            display: block;
+        }
+        
+        .inactive {
             display: none;
-            position: absolute;
-            margin-left: 100px;
-            height: 50px;
         }
         
-        #brains .brain-wrapper:hover textarea {
+        .brain-wrapper {
+            width: 60px;
+            height: 60px;
+            overflow: hidden;
             display: inline-block;
         }
         
-        #brains .brain-wrapper textarea:focus {
-            display: inline-block;
+        .brain-wrapper .thumbnail {
+            width: 150px;
+            margin-top: -10px;
+            margin-left: -45px;
         }
         
-        #backup {
-            text-align: center;
+        .brain-wrapper .text {
+            display: none;
+            resize: none;
         }
         
-        #backup .brain-wrapper {
-            display: inline-block;
+        .brain-wrapper .text.active {
+            position: fixed;
+            border: 1px solid #888;
+            box-shadow: inset 0 0 600px 75px rgba(0, 0, 0, 1);
+            color: white;
+            background: rgba(255, 255, 255, .8) center center no-repeat;
+            display: block;
+            top: 0;
+            left: 0;
+            margin-top: 40px;
+            width: 100%;
+            height: 40%;
+            z-index: 100;
+        }
+        
+        .container {
+            border-bottom: 1px solid grey;
+        }
+        
+        .c-inner {
+            min-height: 10px;
+        }
+        
+        .c-preview .c-inner {
+            width: 80%;
+            max-width: 600px;
+            height: 200px;
+            overflow: auto;
+            margin: 0 auto;
         }
         
         #canvas {
-            width: 120px;
+            width: 80%;
+            max-width: 600px;
             cursor: zoom-in;
         }
         
-        #overlay {
-            width: 600px;
-            max-width: 100%;
-        }
-        
-        #loading {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, .7);
-            text-align: center;
-            color: white;
-            z-index: 10;
-        }
-        
-        #loading .fa-spinner {
-            margin-top: 20%;
-        }
-        
-        .preview {
+        .c-controls .pure-button {
             box-sizing: border-box;
-            border-right: 1px solid black;
-            text-align: center;
         }
         
-        .preview aside {
+        .c-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            background: rgba(0, 0, 0, .4);
-            cursor: zoom-out;
-            opacity: 0;
-            height: 0;
+            background: rgba(0, 0, 0, .6);
+            opacity: 1;
+            height: 100%;
             overflow: auto;
             transition: opacity 0.3s linear;
             z-index: 10;
+            color: white;
         }
         
-        .preview .inner-container {
-            overflow: auto;
+        .c-overlay.active {
+            height: 100%;
+            opacity: 1;
         }
         
-        .main-container .inner-container {
-            height: 200px;
-            overflow: hidden;
+        .c-overlay.inactive {
+            display: block;
+            height: 0;
+            opacity: 0;
         }
         
-        .preview .inner-container,
-        .main-container {
-            height: 272px;
-            border-top: 1px solid black;
-            border-bottom: 1px solid black;
+        .c-overlay #loading {
+            margin-top: 25%;
         }
         
-        .container .inner-container .brain-wrapper {
-            height: 50px;
-            overflow: hidden;
+        .c-overlay .c-inner {
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            text-align: right;
+            position: fixed;
         }
         
-        .controls {
-            border-bottom: 1px solid black;
-            text-align: center;
+        .c-overlay .c-inner.active .fa-times {
+            color: black;
+            opacity: .5;
+        }
+        
+        .c-overlay .c-inner.active .fa-times:hover {
+            color: #0078e7;
+            cursor: pointer;
+        }
+        
+        #mirror {
+            width: 100%;
+            max-width: 600px;
+            cursor: zoom-out;
+            margin: 0 auto;
         }
         
         @media screen and (min-device-width: 48em) {
-            #title {
+            .c-header {
                 display: block;
             }
-            body {
-                text-align: center;
+            .brain-wrapper {
+                height: 50px;
+                width: auto;
+                overflow: hidden;
             }
-            .preview .inner-container,
-            .main-container {
-                min-height: 272px;
-                height: 75vh;
+            .brain-wrapper .thumbnail {
+                width: 100px;
+                margin: 0;
             }
-            .main-container .inner-container {
+            .c-preview .c-inner,
+            .c-main .c-inner {
                 min-height: 200px;
-                height: calc(75vh - 72px);
+                height: 50vh;
             }
-            .container .inner-container .brain-wrapper {
-                text-align: center;
+            .c-overlay .c-inner {
+                width: 60%;
+                height: calc(40% + 80px);
+                background-color: white;
+                left: 0;
+                right: 0;
+                margin: 5% auto;
+            }
+            .brain-wrapper .text.active {
+                width: 50%;
+                left: 0;
+                right: 0;
+                margin: calc(5% + 40px) auto;
+            }
+        }
+        
+        @media screen and (min-device-width: 64em) {
+            .c-preview .c-inner,
+            .c-main .c-inner {
+                min-height: 200px;
+                height: 60vh;
+            }
+            .c-main .c-inner {
+                overflow: auto;
+            }
+            .c-main .c-inner .brain-wrapper {
+                display: block;
+            }
+            .brain-wrapper .text {
+                position: absolute;
+                margin-left: 100px;
+                height: 50px;
+                /* yes, I know it is bad */
+                background-image: none !important;
+            }
+            #brains .brain-wrapper:hover .text {
+                display: inline-block;
+            }
+            #brains .brain-wrapper .text:focus {
+                display: inline-block;
+            }
+            .c-controls .pure-button {
+                width: 64px;
             }
         }
     </style>
@@ -153,43 +219,46 @@
 
 <body>
     <article class="pure-g">
-        <h1 id="title" class="pure-u-1">Expanding Brain Generator</h1>
-        <section class="pure-u-2-5 preview">
-            <div class="inner-container">
-                <canvas id="canvas" width="600" height="100" onclick="overlayApi.show()"></canvas>
+        <header class="pure-u-1 container c-header">
+            <h1 id="title">Expanding Brain Generator</h1>
+        </header>
+        <section class="pure-u-1 pure-u-md-2-5 container c-preview">
+            <small>preview</small>
+            <div class="c-inner">
+                <canvas id="canvas" width="600" height="100" onclick="canvasApi.preview()"></canvas>
             </div>
-            <aside onclick="overlayApi.hide()">
-                <canvas id="overlay" width="600" height="100"></canvas>
-            </aside>
         </section>
-        <section class="pure-u-3-5 container main-container">
-            <button class="pure-button control navigation" onclick="scrollApi.scrollElement(this.nextElementSibling, -50)">
-                <i class="fa fa-arrow-up"></i>
-            </button>
-            <div id="brains" class="inner-container pure-form" onwheel="scrollApi.scrollElement(this, 0, event)"></div>
-            <button class="pure-button control navigation" onclick="scrollApi.scrollElement(this.previousElementSibling, 50)">
-                <i class="fa fa-arrow-down"></i>
-            </button>
-        </section>
-        <section class="pure-u-1 controls">
-            <a class="pure-button pure-button-primary" onclick="canvasApi.downloadCanvas(this, 'meme.png')">
+        <main class="pure-u-1 pure-u-md-3-5 container c-main">
+            <small>building blocks</small>
+            <div id="brains" class="c-inner pure-form"></div>
+        </main>
+        <section class="pure-u-1 container c-controls pure-g pure-button-group" role="group">
+            <a class="pure-button pure-button-primary pure-u-1-5" onclick="canvasApi.preview()">
+                <i class="fa fa-eye"></i>
+            </a>
+            <a class="pure-button button-success pure-u-3-5" onclick="canvasApi.download(this)">
                 <i class="fa fa-floppy-o"></i>
             </a>
-            <label for="center" class="pure-checkbox">
-                <a class="pure-button pure-button-primary">
-                    <i class="fa fa-align-center"></i>
-                    <input id="center" type="checkbox" onchange="canvasApi.redrawBrains()" checked>
-                </a>
+            <label for="center" class="pure-button pure-button-primary pure-checkbox pure-u-1-5">
+                <i class="fa fa-align-center"></i>
+                <input id="center" type="checkbox" onchange="canvasApi.redrawBrains()" checked>
             </label>
         </section>
-        <aside class="pure-u-1 container">
-            <div id="backup" class="inner-container"></div>
-        </aside>
+        <footer class="pure-u-1 container c-backup">
+            <small>backup</small>
+            <div id="backup" class="c-inner"></div>
+        </footer>
     </article>
-    <aside id="loading">
-        <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
-        <span class="sr-only">Loading...</span>
-        <p>Use drag&amp;drop and fill the textboxes to create your meme!</p>
+    <aside class="container c-overlay" onclick="overlayApi.hide()">
+        <section id="loading">
+            <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+            <span class="sr-only">Loading...</span>
+            <p>Use drag&amp;drop and fill the textboxes to create your meme!</p>
+        </section>
+        <canvas id="mirror" class="inactive" width="600" height="100"></canvas>
+        <div class="c-inner inactive">
+            <i class="fa fa-times fa-2x"></i>
+        </div>
     </aside>
     <a href="https://github.com/mat3e/brains">
         <img class="gh-ribbon" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"
@@ -197,192 +266,205 @@
     </a>
 
     <script>
-        var canvasApi = (function () {
-            var WIDTH = 600;
-
-            var brainsContainer = document.getElementById('brains');
-            var canvas = document.getElementById('canvas');
-            var ctx = canvas.getContext('2d');
-            canvas.width = WIDTH;
-
+        var cssApi = (function () {
+            var SEPARATOR = ' ';
+            var ACTIVE_CSS = 'active';
+            var INACTIVE_CSS = 'inactive';
             return {
-                get WIDTH() {
-                    return WIDTH;
+                activate(element) {
+                    changeElementClass(element, INACTIVE_CSS, ACTIVE_CSS);
                 },
-                redrawBrains() {
-                    canvasApi.clearCanvas();
-                    canvasApi.drawRecurrently(0, 0);
+                deactivate(element) {
+                    changeElementClass(element, ACTIVE_CSS, INACTIVE_CSS);
                 },
-                drawRecurrently(heightProm, i) {
-                    if (i < brainsContainer.children.length) {
-                        var child = brainsContainer.children[i];
-
-                        if (heightProm instanceof Promise) {
-                            heightProm.then(function (availableHeight) {
-                                canvasApi.drawRecurrently(canvasApi.drawRowAtHeight(child, availableHeight), ++i);
-                            });
-                        } else {
-                            canvasApi.drawRecurrently(canvasApi.drawRowAtHeight(child, heightProm), ++i);
-                        }
-                    } else {
-                        heightProm.then(function () {
-                            canvasApi.resizeCanvas(canvas.height - 5);
-                            ctx.fillStyle = 'rgba(220,220,220,.8)';
-                            ctx.font = '15px Arial';
-                            ctx.fillText('mat3e.github.io/brains', 10, 20);
-                        });
+                addElementClass(element, className) {
+                    var classes = element.className.split(SEPARATOR);
+                    var index = classes.indexOf(className);
+                    if (index === -1) {
+                        classes.push(className);
+                        element.className = classes.join(SEPARATOR);
                     }
                 },
-                drawRowAtHeight(source, y) {
-                    var lineHeight = 3;
-
-                    var imageObj = new Image();
-                    imageObj.src = source.lastChild.src;
-
-                    var result = new Promise(function (resolve) {
-                        imageObj.onload = function () {
-                            var ratio = imageObj.height / imageObj.width;
-                            var height = (WIDTH / 2) * ratio;
-                            var linePosY = y + height;
-                            canvasApi.resizeCanvas(linePosY + lineHeight + 1);
-                            ctx.drawImage(imageObj, (WIDTH / 2), y, (WIDTH / 2), height);
-                            ctx.fillStyle = '#000';
-                            ctx.fillRect(0, linePosY, canvas.width, lineHeight);
-
-                            canvasApi.drawCenteredMultilineText(source, y, height);
-
-                            resolve(linePosY + lineHeight);
-                        }
-                    });
-
-                    return result;
-                },
-                drawCenteredMultilineText(source, y, availableHeight) {
-                    if (source.firstChild && source.firstChild.value) {
-                        var textArray = source.firstChild.value.split('\n');
-                        var fontSize = 25;
-                        var fontType = 'Arial';
-                        var centered = document.getElementById('center').checked;
-                        ctx.font = fontSize + 'px ' + fontType;
-
-                        var starter = -10;
-                        var i = textArray.length / 2;
-                        textArray.forEach(function (line) {
-                            var x = 10;
-                            if (centered) {
-                                ctx.textAlign = 'center';
-                                x = WIDTH / 4;
-                            } else {
-                                ctx.textAlign = 'start';
-                            }
-                            ctx.fillText(line, x, y + availableHeight / 2 - starter - i * fontSize);
-                            --i;
-                        });
-                    }
-                },
-                resizeCanvas(newSize) {
-                    var temp = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                    canvas.height = newSize;
-                    canvasApi.clearCanvas();
-                    ctx.putImageData(temp, 0, 0);
-                },
-                clearCanvas() {
-                    ctx.fillStyle = '#fff';
-                    ctx.fillRect(0, 0, canvas.width, canvas.height);
-                },
-                downloadCanvas(link, filename) {
-                    link.href = document.getElementById('canvas').toDataURL();
-                    link.download = filename;
-                }
-            }
-        })();
-
-        var scrollApi = (function () {
-            var className = 'pure-button-disabled';
-
-            return {
-                scrollElement(element, value, event) {
-                    if (event && event.deltaY) {
-                        if (event.deltaY > 0) {
-                            scrollApi.scrollElement(element, 50);
-                        } else {
-                            scrollApi.scrollElement(element, -50);
-                        }
-                    } else {
-                        element.scrollTop += value;
-                    }
-
-                    scrollApi.verifyScroll(element);
-                },
-                verifyScroll(element) {
-                    if (element.scrollTop === 0) {
-                        addElementClass(element.previousElementSibling, className);
-                    } else {
-                        removeElementClass(element.previousElementSibling, className);
-                    }
-
-                    if (isBottom(element)) {
-                        addElementClass(element.nextElementSibling, className);
-                    } else {
-                        removeElementClass(element.nextElementSibling, className);
+                removeElementClass(element, className) {
+                    var classes = element.className.split(SEPARATOR);
+                    var index = classes.indexOf(className);
+                    if (index !== -1) {
+                        classes.splice(index, 1);
+                        element.className = classes.join(SEPARATOR);
                     }
                 }
             }
-
-            function addElementClass(element, className) {
-                var classes = element.className.split(' ');
-                var index = classes.indexOf(className);
-                if (index === -1) {
-                    classes.push(className);
-                    element.className = classes.join(' ');
-                }
-            };
-            function removeElementClass(element, className) {
-                var classes = element.className.split(' ');
-                var index = classes.indexOf(className);
-                if (index !== -1) {
-                    classes.splice(index, 1);
-                    element.className = classes.join(' ');
-                }
-            };
-            function isBottom(element) {
-                var diff = element.scrollHeight - element.scrollTop;
-                return diff === element.clientHeight || diff <= element.clientHeight + 5; // up to 5 - tolerance for calc
-            };
+            function changeElementClass(element, from, to) {
+                cssApi.removeElementClass(element, from);
+                cssApi.addElementClass(element, to);
+            }
         })();
 
         var overlayApi = (function () {
-            var overlay = document.getElementById('overlay');
-            var overlayMainStyle = overlay.parentElement.style;
-            overlay.width = canvasApi.WIDTH;
-            overlay.style.width = canvasApi.WIDTH + 'px';
+            var loading = document.getElementById('loading');
+            var overlay = loading.parentElement;
+
+            window.onload = function () {
+                cssApi.activate(loading);
+                overlayApi.hide();
+            };
+
+            var actualElement = null;
 
             return {
-                show() {
-                    var originalCanvas = document.getElementById('canvas');
-                    var originalCtx = originalCanvas.getContext('2d');
-                    var overlayCanvas = document.getElementById('overlay');
-                    var overlayCtx = overlayCanvas.getContext('2d');
-
-                    overlayCanvas.height = originalCanvas.height;
-                    overlayCtx.putImageData(originalCtx.getImageData(0, 0, originalCanvas.width, originalCanvas.height), 0, 0);
-
-                    overlayMainStyle.height = '100%';
-                    overlayMainStyle.opacity = '1';
+                showPreview() {
+                    show(1);
+                },
+                showModalForElement(element) {
+                    show(2);
+                    console.log(getComputedStyle(overlay));
+                    actualElement = element;
+                    cssApi.activate(actualElement);
                 },
                 hide() {
-                    overlayMainStyle.opacity = '0';
-                    overlayMainStyle.height = '0';
+                    cssApi.deactivate(overlay);
+                    cancelDisplaying();
+                    if (actualElement) {
+                        cssApi.deactivate(actualElement);
+                    }
+                }
+            }
+
+            function show(element) {
+                if (typeof element === 'number') {
+                    cssApi.activate(overlay.children[element]);
+                } else if (element && element.style) {
+                    cssApi.activate(element);
+                }
+                cssApi.activate(overlay);
+            }
+            function cancelDisplaying() {
+                for (var i = 0; i < overlay.children.length; ++i) {
+                    cssApi.deactivate(overlay.children[i]);
+                }
+            }
+        })();
+
+        var canvasApi = (function () {
+            var WIDTH = 600;
+            var FILENAME = 'meme.png';
+
+            var brainsContainer = document.getElementById('brains');
+            var mirrorCanvas = document.getElementById('mirror');
+            var mirrorCtx = mirrorCanvas.getContext('2d');
+            var canvas = document.getElementById('canvas');
+            var ctx = canvas.getContext('2d');
+            var innerCanvasContainer = canvas.parentElement;
+
+            canvas.width = WIDTH;
+            mirrorCanvas.width = WIDTH;
+
+            canvas.style.maxWidth = WIDTH + 'px';
+            mirrorCanvas.style.maxWidth = WIDTH + 'px';
+            innerCanvasContainer.style.maxWidth = WIDTH + 'px';
+
+
+            return {
+                preview() {
+                    mirrorCanvas.height = canvas.height;
+                    mirrorCtx.putImageData(ctx.getImageData(0, 0, canvas.width, canvas.height), 0, 0);
+
+                    overlayApi.showPreview();
+                },
+                redrawBrains() {
+                    var oldTop = innerCanvasContainer.scrollTop;
+                    canvasApi.clear();
+                    drawRecurrently(0, 0, function () { innerCanvasContainer.scrollTop = oldTop; });
+                },
+                resize(newSize) {
+                    var temp = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                    canvas.height = newSize;
+                    canvasApi.clear();
+                    ctx.putImageData(temp, 0, 0);
+                },
+                clear() {
+                    ctx.fillStyle = '#fff';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                },
+                download(link) {
+                    link.href = canvas.toDataURL();
+                    link.download = FILENAME;
+                }
+            }
+
+            function drawRecurrently(heightProm, i, callback) {
+                if (i < brainsContainer.children.length) {
+                    var child = brainsContainer.children[i];
+
+                    if (heightProm instanceof Promise) {
+                        heightProm.then(function (availableHeight) {
+                            drawRecurrently(drawRowAtHeight(child, availableHeight), ++i, callback);
+                        });
+                    } else {
+                        drawRecurrently(drawRowAtHeight(child, heightProm), ++i, callback);
+                    }
+                } else {
+                    heightProm.then(function () {
+                        canvasApi.resize(canvas.height - 5);
+                        ctx.fillStyle = 'rgba(220,220,220,.8)';
+                        ctx.font = '15px Arial';
+                        ctx.fillText('mat3e.github.io/brains', 10, 20);
+                        if (typeof callback === 'function') {
+                            callback();
+                        }
+                    });
+                }
+            }
+            function drawRowAtHeight(source, y) {
+                var lineHeight = 3;
+
+                var imageObj = new Image();
+                imageObj.src = source.lastChild.src;
+
+                var result = new Promise(function (resolve) {
+                    imageObj.onload = function () {
+                        var ratio = imageObj.height / imageObj.width;
+                        var height = (WIDTH / 2) * ratio;
+                        var linePosY = y + height;
+                        canvasApi.resize(linePosY + lineHeight + 1);
+                        ctx.drawImage(imageObj, (WIDTH / 2), y, (WIDTH / 2), height);
+                        ctx.fillStyle = '#000';
+                        ctx.fillRect(0, linePosY, canvas.width, lineHeight);
+
+                        drawCenteredMultilineText(source, y, height);
+
+                        resolve(linePosY + lineHeight);
+                    }
+                });
+
+                return result;
+            }
+            function drawCenteredMultilineText(source, y, availableHeight) {
+                if (source.firstChild && source.firstChild.value) {
+                    var textArray = source.firstChild.value.split('\n');
+                    var fontSize = 25;
+                    var fontType = 'Arial';
+                    var centered = document.getElementById('center').checked;
+                    ctx.font = fontSize + 'px ' + fontType;
+
+                    var starter = -10;
+                    var i = textArray.length / 2;
+                    textArray.forEach(function (line) {
+                        var x = 10;
+                        if (centered) {
+                            ctx.textAlign = 'center';
+                            x = WIDTH / 4;
+                        } else {
+                            ctx.textAlign = 'start';
+                        }
+                        ctx.fillText(line, x, y + availableHeight / 2 - starter - i * fontSize);
+                        --i;
+                    });
                 }
             }
         })();
 
         (function () {
-            window.onload = function () {
-                var load = document.getElementById('loading');
-                load.parentElement.removeChild(load);
-            };
-
             var BRAIN_START = 0, BRAIN_END = 10;
             var BACKUP_START = 0, BACKUP_END = 14;
 
@@ -392,13 +474,11 @@
             generateBackup();
 
             canvasApi.redrawBrains();
-            scrollApi.verifyScroll(brainsContainer);
 
             var drake = dragula([brainsContainer, backupContainer]);
             drake.on('drop', function (el, target, source) {
                 if (source !== target || target === brainsContainer) {
                     canvasApi.redrawBrains();
-                    scrollApi.verifyScroll(brainsContainer);
                 }
             });
 
@@ -418,10 +498,17 @@
 
                     var input = document.createElement('textarea');
                     input.onchange = canvasApi.redrawBrains;
+                    input.className = 'text';
+                    input.placeholder = 'Enter text for the picture...';
 
                     var image = document.createElement('img');
                     image.src = prefix + i + '.jpg';
                     image.className = 'thumbnail';
+                    image.onclick = function () {
+                        var currInput = this.previousElementSibling;
+                        overlayApi.showModalForElement(currInput);
+                        currInput.style.backgroundImage = 'url(' + this.src + ')';
+                    }
 
                     div.appendChild(input);
                     div.appendChild(image);
