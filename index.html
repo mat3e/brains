@@ -346,12 +346,14 @@
                     show(2);
                     actualElement = element;
                     cssApi.activate(actualElement);
+                    actualElement.focus();
                 },
                 hide() {
                     cssApi.deactivate(overlay);
                     cancelDisplaying();
                     if (actualElement) {
                         cssApi.deactivate(actualElement);
+                        var actualElement = null;
                     }
                     location.hash = '';
                 }
