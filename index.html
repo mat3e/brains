@@ -351,6 +351,7 @@
                     cssApi.deactivate(overlay);
                     cancelDisplaying();
                     if (actualElement) {
+                        actualElement.blur();
                         cssApi.deactivate(actualElement);
                         var actualElement = null;
                     }
