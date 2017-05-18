@@ -530,6 +530,11 @@
                     input.onchange = canvasApi.redrawBrains;
                     input.className = 'text';
                     input.placeholder = 'Enter text for the picture...';
+                    input.onkeyup = function (e) {
+                        if (e.keyCode === 27) {
+                            overlayApi.hide();
+                        }
+                    }
 
                     var image = document.createElement('img');
                     image.src = prefix + i + '.jpg';
