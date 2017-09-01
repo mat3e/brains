@@ -2,7 +2,12 @@
 <html>
 
 <head>
+    <meta name="description" content="'Expanding Brain' Meme Generator">
+    <meta name="keywords" content="Expanding,Brain,meme,generator,online,JavaScript,JS">
+    <meta name="author" content="mat3e">
+
     <title>Expanding Brain Generator</title>
+
     <script src='https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.2/dragula.min.js'></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.2/dragula.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css" />
@@ -13,48 +18,48 @@
             font-family: Arial;
             font-size: 2em;
         }
-        
+
         .button-success {
             background: rgb(28, 184, 65);
             color: white;
         }
-        
+
         .c-header {
             display: none;
         }
-        
+
         .gh-ribbon {
             position: absolute;
             top: 0;
             left: 0;
             border: 0;
         }
-        
+
         .active {
             display: block;
         }
-        
+
         .inactive {
             display: none;
         }
-        
+
         .brain-wrapper {
             width: 12.5vw;
             height: 12.5vw;
             overflow: hidden;
             display: inline-block;
         }
-        
+
         .brain-wrapper .thumbnail {
             width: 200%;
             margin-left: -50%;
         }
-        
+
         .brain-wrapper .text {
             display: none;
             resize: none;
         }
-        
+
         .brain-wrapper .text.active {
             position: fixed;
             border: 1px solid #888;
@@ -70,15 +75,15 @@
             z-index: 100;
             font-size: 5rem;
         }
-        
+
         .container {
             border-bottom: 1px solid grey;
         }
-        
+
         .c-inner {
             min-height: 10px;
         }
-        
+
         .c-preview .c-inner {
             width: 80%;
             max-width: 600px;
@@ -86,17 +91,17 @@
             overflow: auto;
             margin: 0 auto;
         }
-        
+
         #canvas {
             width: 90%;
             max-width: 600px;
             cursor: zoom-in;
         }
-        
+
         .c-controls .pure-button {
             box-sizing: border-box;
         }
-        
+
         .c-overlay {
             position: fixed;
             top: 0;
@@ -110,22 +115,22 @@
             z-index: 10;
             color: white;
         }
-        
+
         .c-overlay.active {
             height: 100%;
             opacity: 1;
         }
-        
+
         .c-overlay.inactive {
             display: block;
             height: 0;
             opacity: 0;
         }
-        
+
         .c-overlay #loading {
             margin-top: 25%;
         }
-        
+
         .c-overlay .c-inner {
             width: 100%;
             height: 100%;
@@ -133,24 +138,24 @@
             text-align: right;
             position: fixed;
         }
-        
+
         .c-overlay .c-inner.active .fa-times {
             color: black;
             opacity: .5;
         }
-        
+
         .c-overlay .c-inner.active .fa-times:hover {
             color: #0078e7;
             cursor: pointer;
         }
-        
+
         #mirror {
             width: 100%;
             max-width: 600px;
             cursor: zoom-out;
             margin: 0 auto;
         }
-        
+
         @media screen and (min-device-width: 48em) {
             .pure-u-md-2-5 {
                 width: 40%;
@@ -192,7 +197,7 @@
                 height: 40%;
             }
         }
-        
+
         @media screen and (min-device-width: 64em) {
             body {
                 font-size: 1em;
