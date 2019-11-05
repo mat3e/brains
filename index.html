@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <meta name="description" content="'Expanding Brain' Meme Generator">
@@ -8,14 +8,14 @@
 
     <title>Expanding Brain Generator</title>
 
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.2/dragula.min.js'></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.2/dragula.min.css">
+    <script src="https://unpkg.com/dragula@3.7.2/dist/dragula.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/dragula@3.7.2/dist/dragula.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css" />
-    <link rel="stylesheet" href="https://unpkg.com/purecss@0.6.2/build/pure-min.css">
+    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.1/build/pure-min.css">
     <style>
         body {
             text-align: center;
-            font-family: Arial;
+            font-family: Arial,serif;
             font-size: 2em;
             overscroll-behavior-y: contain;
         }
@@ -161,27 +161,33 @@
             .pure-u-md-2-5 {
                 width: 40%;
             }
+
             .pure-u-md-3-5 {
                 width: 60%;
             }
+
             .c-header {
                 display: block;
                 font-size: 1rem;
             }
+
             .brain-wrapper {
                 height: 50px;
                 width: auto;
                 overflow: hidden;
             }
+
             .brain-wrapper .thumbnail {
                 width: 100px;
                 margin: 0;
             }
+
             .c-preview .c-inner,
             .c-main .c-inner {
                 min-height: 30vh;
                 height: 50vh;
             }
+
             .c-overlay .c-inner {
                 width: 75%;
                 height: calc(50% + 2em);
@@ -190,6 +196,7 @@
                 right: 0;
                 margin: 5% auto;
             }
+
             .brain-wrapper .text.active {
                 width: 65%;
                 left: 0;
@@ -203,17 +210,21 @@
             body {
                 font-size: 1em;
             }
+
             .c-preview .c-inner,
             .c-main .c-inner {
                 min-height: 200px;
                 height: 60vh;
             }
+
             .c-main .c-inner {
                 overflow: auto;
             }
+
             .c-main .c-inner .brain-wrapper {
                 display: block;
             }
+
             .brain-wrapper .text {
                 position: absolute;
                 margin-left: 100px;
@@ -221,18 +232,23 @@
                 /* yes, I know it is bad */
                 background-image: none !important;
             }
+
             .brain-wrapper .text.active {
                 font-size: 3em;
             }
+
             #brains .brain-wrapper:hover .text {
                 display: inline-block;
             }
+
             #brains .brain-wrapper .text:focus {
                 display: inline-block;
             }
+
             .c-controls .pure-button {
                 width: 64px;
             }
+
             .c-overlay #loading {
                 margin-top: 10%;
             }
@@ -241,324 +257,307 @@
 </head>
 
 <body>
-    <article class="pure-g">
-        <header class="pure-u-1 container c-header">
-            <h1 id="title">Expanding Brain Generator</h1>
-        </header>
-        <section class="pure-u-1 pure-u-md-2-5 container c-preview">
-            <small>preview</small>
-            <div class="c-inner">
-                <canvas id="canvas" width="600" height="100" onclick="canvasApi.preview()"></canvas>
-            </div>
-        </section>
-        <main class="pure-u-1 pure-u-md-3-5 container c-main">
-            <small>building blocks</small>
-            <div id="brains" class="c-inner pure-form"></div>
-        </main>
-        <section class="pure-u-1 container c-controls pure-g pure-button-group" role="group">
-            <a class="pure-button pure-button-primary pure-u-1-5" onclick="canvasApi.preview()">
-                <i class="fa fa-eye"></i>
-            </a>
-            <a class="pure-button button-success pure-u-3-5" onclick="canvasApi.download(this)">
-                <i class="fa fa-floppy-o"></i>
-            </a>
-            <label for="center" class="pure-button pure-button-primary pure-checkbox pure-u-1-5">
-                <i class="fa fa-align-center"></i>
-                <input id="center" type="checkbox" onchange="canvasApi.redrawBrains()" checked>
-            </label>
-        </section>
-        <footer class="pure-u-1 container c-backup">
-            <small>backup</small>
-            <div id="backup" class="c-inner"></div>
-        </footer>
-    </article>
-    <aside class="container c-overlay" onclick="overlayApi.hide()">
-        <section id="loading">
-            <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
-            <span class="sr-only">Loading...</span>
-            <p>Use drag&amp;drop and fill the textboxes to create your meme!</p>
-        </section>
-        <canvas id="mirror" class="inactive" width="600" height="100"></canvas>
-        <div class="c-inner inactive">
-            <i class="fa fa-times fa-2x"></i>
+<article class="pure-g">
+    <header class="pure-u-1 container c-header">
+        <h1 id="title">Expanding Brain Generator</h1>
+    </header>
+    <section class="pure-u-1 pure-u-md-2-5 container c-preview">
+        <small>preview</small>
+        <div class="c-inner">
+            <canvas id="canvas" width="600" height="100" onclick="canvasApi.preview()"></canvas>
         </div>
-    </aside>
-    <a href="https://github.com/mat3e/brains">
-        <img class="gh-ribbon" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"
-            src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67">
-    </a>
+    </section>
+    <main class="pure-u-1 pure-u-md-3-5 container c-main">
+        <small>building blocks</small>
+        <div id="brains" class="c-inner pure-form"></div>
+    </main>
+    <section class="pure-u-1 container c-controls pure-g pure-button-group" role="group">
+        <a class="pure-button pure-button-primary pure-u-1-5" onclick="canvasApi.preview()">
+            <i class="fa fa-eye"></i>
+        </a>
+        <a class="pure-button button-success pure-u-3-5" onclick="canvasApi.download(this)">
+            <i class="fa fa-floppy-o"></i>
+        </a>
+        <label for="center" class="pure-button pure-button-primary pure-checkbox pure-u-1-5">
+            <i class="fa fa-align-center"></i>
+            <input id="center" type="checkbox" onchange="canvasApi.redrawBrains()" checked>
+        </label>
+    </section>
+    <footer class="pure-u-1 container c-backup">
+        <small>backup</small>
+        <div id="backup" class="c-inner"></div>
+    </footer>
+</article>
+<aside class="container c-overlay" onclick="overlayApi.hide()">
+    <section id="loading" class="active">
+        <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+        <span class="sr-only">Loading...</span>
+        <p>Use drag&amp;drop and fill the textboxes to create your meme!</p>
+    </section>
+    <canvas id="mirror" class="inactive" width="600" height="100"></canvas>
+    <div class="c-inner inactive">
+        <i class="fa fa-times fa-2x"></i>
+    </div>
+</aside>
+<a href="https://github.com/mat3e/brains">
+    <img class="gh-ribbon" alt="Fork me on GitHub"
+         data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png"
+         src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67">
+</a>
 
-    <script>
-        var cssApi = (function () {
-            var SEPARATOR = ' ';
-            var ACTIVE_CSS = 'active';
-            var INACTIVE_CSS = 'inactive';
-            return {
-                activate(element) {
-                    changeElementClass(element, INACTIVE_CSS, ACTIVE_CSS);
-                },
-                deactivate(element) {
-                    changeElementClass(element, ACTIVE_CSS, INACTIVE_CSS);
-                },
-                addElementClass(element, className) {
-                    var classes = element.className.split(SEPARATOR);
-                    var index = classes.indexOf(className);
-                    if (index === -1) {
-                        classes.push(className);
-                        element.className = classes.join(SEPARATOR);
-                    }
-                },
-                removeElementClass(element, className) {
-                    var classes = element.className.split(SEPARATOR);
-                    var index = classes.indexOf(className);
-                    if (index !== -1) {
-                        classes.splice(index, 1);
-                        element.className = classes.join(SEPARATOR);
-                    }
-                }
+<script>
+    const cssApi = (function() {
+        const ACTIVE_CSS = 'active';
+        const INACTIVE_CSS = 'inactive';
+        return {
+            activate(element) {
+                element.classList.add(ACTIVE_CSS);
+                element.classList.remove(INACTIVE_CSS);
+            },
+            deactivate(element) {
+                element.classList.add(INACTIVE_CSS);
+                element.classList.remove(ACTIVE_CSS);
             }
-            function changeElementClass(element, from, to) {
-                cssApi.removeElementClass(element, from);
-                cssApi.addElementClass(element, to);
-            }
-        })();
+        };
+    })();
 
-        var overlayApi = (function () {
-            var hash = 'overlay';
-            var loading = document.getElementById('loading');
-            var overlay = loading.parentElement;
+    const overlayApi = (function() {
+        const state = Object.freeze({
+            LOADING: 0,
+            PREVIEW: 1,
+            EXIT_BTN: 2
+        });
+        let currentState = state.LOADING;
+        const HASH = 'overlay';
+        const loading = document.getElementById('loading');
+        const overlay = loading.parentElement;
+        let mainElement = null;
 
-            window.onload = function () {
-                cssApi.activate(loading);
+        window.onkeyup = (e) => {
+            if (e.keyCode === 27) {
                 overlayApi.hide();
-            };
-
-            window.onhashchange = function (e) {
-                if (e.oldURL.split('#')[1] === hash) {
-                    overlayApi.hide();
-                    e.preventDefault();
-                    return false;
-                }
             }
+        };
 
-            var actualElement = null;
+        window.onload = () => {
+            currentState = null;
+            overlayApi.hide();
+        };
 
-            return {
-                showPreview() {
-                    show(1);
-                },
-                showModalForElement(element) {
-                    show(2);
-                    actualElement = element;
-                    cssApi.activate(actualElement);
-                    actualElement.focus();
-                },
-                hide() {
+        window.onhashchange = (e) => {
+            if (e.oldURL.split('#')[1] === HASH) {
+                overlayApi.hide();
+                e.preventDefault();
+                return false;
+            }
+        };
+
+        return {
+            showPreview() {
+                show(state.PREVIEW);
+            },
+            showModalForElement(element) {
+                show(state.EXIT_BTN);
+                mainElement = element;
+                cssApi.activate(mainElement);
+                mainElement.focus();
+            },
+            hide() {
+                if (currentState !== state.LOADING) {
                     cssApi.deactivate(overlay);
                     cancelDisplaying();
-                    if (actualElement) {
-                        actualElement.blur();
-                        cssApi.deactivate(actualElement);
-                        actualElement = null;
+                    if (mainElement) {
+                        mainElement.blur();
+                        cssApi.deactivate(mainElement);
+                        mainElement = null;
                     }
                     location.hash = '';
                 }
             }
+        };
 
-            function show(element) {
-                if (typeof element === 'number') {
-                    cssApi.activate(overlay.children[element]);
-                } else if (element && element.style) {
-                    cssApi.activate(element);
-                }
-                cssApi.activate(overlay);
-                location.hash = hash;
+        function show(element) {
+            currentState = element;
+            cssApi.activate(overlay.children[element]);
+            cssApi.activate(overlay);
+            location.hash = HASH;
+        }
+
+        function cancelDisplaying() {
+            for (let i = 0; i < overlay.children.length; ++i) {
+                cssApi.deactivate(overlay.children[i]);
             }
-            function cancelDisplaying() {
-                for (var i = 0; i < overlay.children.length; ++i) {
-                    cssApi.deactivate(overlay.children[i]);
-                }
-            }
-        })();
+        }
+    })();
 
-        var canvasApi = (function () {
-            var WIDTH = 600;
-            var FILENAME = 'meme.png';
+    const canvasApi = (function() {
+        const WIDTH = 600;
+        const FILENAME = 'meme.png';
 
-            var brainsContainer = document.getElementById('brains');
-            var mirrorCanvas = document.getElementById('mirror');
-            var mirrorCtx = mirrorCanvas.getContext('2d');
-            var canvas = document.getElementById('canvas');
-            var ctx = canvas.getContext('2d');
-            var innerCanvasContainer = canvas.parentElement;
+        const brainsContainer = document.getElementById('brains');
+        const mirrorCanvas = document.getElementById('mirror');
+        const mirrorCtx = mirrorCanvas.getContext('2d');
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const innerCanvasContainer = canvas.parentElement;
 
-            canvas.width = WIDTH;
-            mirrorCanvas.width = WIDTH;
-
-            canvas.style.maxWidth = WIDTH + 'px';
-            mirrorCanvas.style.maxWidth = WIDTH + 'px';
-            innerCanvasContainer.style.maxWidth = WIDTH + 'px';
+        canvas.width = WIDTH;
+        canvas.style.maxWidth = WIDTH + 'px';
+        mirrorCanvas.width = WIDTH;
+        mirrorCanvas.style.maxWidth = WIDTH + 'px';
+        innerCanvasContainer.style.maxWidth = WIDTH + 'px';
 
 
-            return {
-                preview() {
-                    mirrorCanvas.height = canvas.height;
-                    mirrorCtx.putImageData(ctx.getImageData(0, 0, canvas.width, canvas.height), 0, 0);
-
-                    overlayApi.showPreview();
-                },
-                redrawBrains() {
-                    var oldTop = innerCanvasContainer.scrollTop;
-                    canvasApi.clear();
-                    drawRecurrently(0, 0, function () { innerCanvasContainer.scrollTop = oldTop; });
-                },
-                resize(newSize) {
-                    var temp = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                    canvas.height = newSize;
-                    canvasApi.clear();
-                    ctx.putImageData(temp, 0, 0);
-                },
-                clear() {
-                    ctx.fillStyle = '#fff';
-                    ctx.fillRect(0, 0, canvas.width, canvas.height);
-                },
-                download(link) {
-                    link.href = canvas.toDataURL();
-                    link.download = FILENAME;
-                }
-            }
-
-            function drawRecurrently(heightProm, i, callback) {
-                if (i < brainsContainer.children.length) {
-                    var child = brainsContainer.children[i];
-
-                    if (heightProm instanceof Promise) {
-                        heightProm.then(function (availableHeight) {
-                            drawRecurrently(drawRowAtHeight(child, availableHeight), ++i, callback);
-                        });
-                    } else {
-                        drawRecurrently(drawRowAtHeight(child, heightProm), ++i, callback);
-                    }
-                } else {
-                    heightProm.then(function () {
-                        canvasApi.resize(canvas.height - 5);
-                        ctx.fillStyle = 'rgba(220,220,220,.8)';
-                        ctx.font = '15px Arial';
-                        ctx.fillText('mat3e.github.io/brains', 10, 20);
-                        if (typeof callback === 'function') {
-                            callback();
-                        }
-                    });
-                }
-            }
-            function drawRowAtHeight(source, y) {
-                var lineHeight = 3;
-
-                var imageObj = new Image();
-                imageObj.src = source.lastChild.src;
-
-                var result = new Promise(function (resolve) {
-                    imageObj.onload = function () {
-                        var ratio = imageObj.height / imageObj.width;
-                        var height = (WIDTH / 2) * ratio;
-                        var linePosY = y + height;
-                        canvasApi.resize(linePosY + lineHeight + 1);
-                        ctx.drawImage(imageObj, (WIDTH / 2), y, (WIDTH / 2), height);
-                        ctx.fillStyle = '#000';
-                        ctx.fillRect(0, linePosY, canvas.width, lineHeight);
-
-                        drawCenteredMultilineText(source, y, height);
-
-                        resolve(linePosY + lineHeight);
-                    }
+        return {
+            preview() {
+                mirrorCanvas.height = canvas.height;
+                mirrorCtx.putImageData(ctx.getImageData(0, 0, canvas.width, canvas.height), 0, 0);
+                overlayApi.showPreview();
+            },
+            redrawBrains() {
+                const oldTop = innerCanvasContainer.scrollTop;
+                canvasApi.clear();
+                drawRecurrently(0, 0, () => {
+                    innerCanvasContainer.scrollTop = oldTop;
                 });
-
-                return result;
+            },
+            resize(newSize) {
+                const temp = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                canvas.height = newSize;
+                canvasApi.clear();
+                ctx.putImageData(temp, 0, 0);
+            },
+            clear() {
+                ctx.fillStyle = '#fff';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            },
+            download(link) {
+                link.href = canvas.toDataURL();
+                link.download = FILENAME;
             }
-            function drawCenteredMultilineText(source, y, availableHeight) {
-                if (source.firstChild && source.firstChild.value) {
-                    var textArray = source.firstChild.value.split('\n');
-                    var fontSize = 25;
-                    var fontType = 'Arial';
-                    var centered = document.getElementById('center').checked;
-                    ctx.font = fontSize + 'px ' + fontType;
+        };
 
-                    var starter = -10;
-                    var i = textArray.length / 2;
-                    textArray.forEach(function (line) {
-                        var x = 10;
-                        if (centered) {
-                            ctx.textAlign = 'center';
-                            x = WIDTH / 4;
-                        } else {
-                            ctx.textAlign = 'start';
-                        }
-                        ctx.fillText(line, x, y + availableHeight / 2 - starter - i * fontSize);
-                        --i;
-                    });
+        async function drawRecurrently(heightProm, i, callback = () => {
+        }) {
+            if (i < brainsContainer.children.length) {
+                const child = brainsContainer.children[i];
+
+                if (heightProm instanceof Promise) {
+                    const availableHeight = await heightProm;
+                    await drawRecurrently(drawRowAtHeight(child, availableHeight), ++i, callback);
+                } else {
+                    await drawRecurrently(drawRowAtHeight(child, heightProm), ++i, callback);
                 }
+            } else {
+                await heightProm;
+                canvasApi.resize(canvas.height - 5);
+                ctx.fillStyle = 'rgba(220,220,220,.8)';
+                ctx.font = '15px Arial';
+                ctx.fillText('mat3e.github.io/brains', 10, 20);
+                callback();
             }
-        })();
+        }
 
-        (function () {
-            var BRAIN_START = 0, BRAIN_END = 10;
-            var BACKUP_START = 0, BACKUP_END = 14;
+        function drawRowAtHeight(source, y) {
+            const lineHeight = 3;
 
-            var brainsContainer = document.getElementById('brains');
-            generateBrains();
-            var backupContainer = document.getElementById('backup');
-            generateBackup();
+            const imageObj = new Image();
+            imageObj.src = source.lastChild.src;
 
-            canvasApi.redrawBrains();
+            return new Promise((resolve) => {
+                imageObj.onload = () => {
+                    const ratio = imageObj.height / imageObj.width;
+                    const height = (WIDTH / 2) * ratio;
+                    const linePosY = y + height;
+                    canvasApi.resize(linePosY + lineHeight + 1);
+                    ctx.drawImage(imageObj, (WIDTH / 2), y, (WIDTH / 2), height);
+                    ctx.fillStyle = '#000';
+                    ctx.fillRect(0, linePosY, canvas.width, lineHeight);
 
-            var drake = dragula([brainsContainer, backupContainer]);
-            drake.on('drop', function (el, target, source) {
-                if (source !== target || target === brainsContainer) {
-                    canvasApi.redrawBrains();
+                    drawCenteredMultilineText(source, y, height);
+
+                    resolve(linePosY + lineHeight);
                 }
             });
+        }
 
-            function generateBrains() {
-                generateImgs('img/', BRAIN_START, BRAIN_END, brainsContainer);
-            }
+        function drawCenteredMultilineText(source, y, availableHeight) {
+            if (source.firstChild && source.firstChild.value) {
+                const textArray = source.firstChild.value.split('\n');
+                const fontSize = 25;
+                const fontType = 'Arial';
+                const centered = document.getElementById('center').checked;
+                ctx.font = fontSize + 'px ' + fontType;
 
-            function generateBackup() {
-                generateImgs('img/bonus/', BACKUP_START, BACKUP_END, backupContainer);
-            }
-
-            function generateImgs(prefix, from, to, parent) {
-                for (var i = from; i <= to; ++i) {
-                    var div = document.createElement('div');
-                    div.id = parent.id + ':' + i;
-                    div.className = 'brain-wrapper';
-
-                    var input = document.createElement('textarea');
-                    input.onchange = canvasApi.redrawBrains;
-                    input.className = 'text';
-                    input.placeholder = 'Enter text for the picture...';
-                    input.onkeyup = function (e) {
-                        if (e.keyCode === 27) {
-                            overlayApi.hide();
-                        }
+                const starter = -10;
+                let i = textArray.length / 2;
+                textArray.forEach((line) => {
+                    let x = 10;
+                    if (centered) {
+                        ctx.textAlign = 'center';
+                        x = WIDTH / 4;
+                    } else {
+                        ctx.textAlign = 'start';
                     }
-
-                    var image = document.createElement('img');
-                    image.src = prefix + i + '.jpg';
-                    image.className = 'thumbnail';
-                    image.onclick = function () {
-                        var currInput = this.previousElementSibling;
-                        overlayApi.showModalForElement(currInput);
-                        currInput.style.backgroundImage = 'url(' + this.src + ')';
-                    }
-
-                    div.appendChild(input);
-                    div.appendChild(image);
-
-                    parent.appendChild(div);
-                }
+                    ctx.fillText(line, x, y + availableHeight / 2 - starter - i * fontSize);
+                    --i;
+                });
             }
-        })();
-    </script>
+        }
+    })();
+
+    (function() {
+        const BRAIN_START = 0, BRAIN_END = 10;
+        const BACKUP_START = 0, BACKUP_END = 14;
+
+        const brainsContainer = document.getElementById('brains');
+        generateBrains();
+        const backupContainer = document.getElementById('backup');
+        generateBackup();
+        canvasApi.redrawBrains();
+
+        const drake = dragula([brainsContainer, backupContainer]);
+        drake.on('drop', (el, target, source) => {
+            if (source !== target || target === brainsContainer) {
+                canvasApi.redrawBrains();
+            }
+        });
+
+        function generateBrains() {
+            generateImgs('img/', BRAIN_START, BRAIN_END, brainsContainer);
+        }
+
+        function generateBackup() {
+            generateImgs('img/bonus/', BACKUP_START, BACKUP_END, backupContainer);
+        }
+
+        function generateImgs(prefix, from, to, parent) {
+            for (let i = from; i <= to; ++i) {
+                const div = document.createElement('div');
+                div.id = parent.id + ':' + i;
+                div.className = 'brain-wrapper';
+
+                const input = document.createElement('textarea');
+                input.onchange = canvasApi.redrawBrains;
+                input.className = 'text';
+                input.placeholder = 'Enter text with new lines...';
+
+                const image = document.createElement('img');
+                image.src = prefix + i + '.jpg';
+                image.className = 'thumbnail';
+                image.onclick = function() {
+                    const currInput = this.previousElementSibling;
+                    overlayApi.showModalForElement(currInput);
+                    currInput.style.backgroundImage = 'url(' + this.src + ')';
+                };
+
+                div.appendChild(input);
+                div.appendChild(image);
+                parent.appendChild(div);
+            }
+        }
+    })();
+</script>
 </body>
 
 </html>
